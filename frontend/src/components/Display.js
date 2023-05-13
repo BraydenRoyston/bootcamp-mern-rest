@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BasicTable from './BasicTable';
+import { RESTAURANT_GROUP_DATA } from "./restaurantGroupData";
 
 import './Display.scss';
 
@@ -33,7 +34,7 @@ const Display = ({ loadData, storeData }) => {
     let hasUnmounted = false;
 
     async function fetchData() {
-      const result = await fetch('/api/restaurants')
+      const result = await fetch('/api/restaurants');
       const json = await result.json();
 
       /**
@@ -57,16 +58,25 @@ const Display = ({ loadData, storeData }) => {
     };
   }, [loadData]);
 
-
   return (
     <div className="display-container">
-      <h2>Local Data Handling</h2>
-      <BasicTable data={data} />
-      <h2>Global Data Handling</h2>
-      <BasicTable  data={storeData} />
+      <>
+        {RESTAURANT_GROUP_DATA.map(group => {
+          let restaurantNames = group.restaurantIds;
+          let restaurantsInGroup = data.filter(restaurant => restaurantNames.includes(restaurant.name));
+
+          return (
+            <div key={group.id}>
+              <h2>{group.name}</h2>
+              <h4><i>{group.description}</i></h4>
+              <BasicTable data={restaurantsInGroup} />
+            </div>
+          );
+        })}
+      </>
     </div>
   );
-}
+};
 
 export default Display;
 
