@@ -5,12 +5,11 @@
 import mongoose from "mongoose";
 
 import Restaurant from "./models/restaurant";
+import User from "./models/user";
 import { SEED_RESTAURANT_DATA } from "./seedRestaurantData";
-import { SEED_RESTAURANT_GROUP_DATA } from "../seedRestaurantGroupData"; // catherine
-import RestaurantGroup from "./models/restaurantGroup";
 
 /* change to true if you would like to seed the DB with test restaurant data (will drop any existing data) */
-const SEED_DB = false;
+const SEED_DB = true;
 
 export function connectDb() {
   /* mongoose provides abstracted methods for interacting with MongoDB, like connecting to the database */
@@ -41,13 +40,6 @@ async function seedDb() {
 
   SEED_RESTAURANT_DATA.forEach(async (r) => {
     await Restaurant.create(r);
-  });
-
-  // catherine
-  await RestaurantGroup.deleteMany();
-  
-  SEED_RESTAURANT_GROUP_DATA.forEach(async (r) => {
-    await RestaurantGroup.create(r);
   });
 
   console.info("Successfully seeded the database!");
